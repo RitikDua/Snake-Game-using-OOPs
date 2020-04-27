@@ -1,6 +1,7 @@
 const canvas=document.getElementById("game");
 const ctx=canvas.getContext("2d");
 let dx=0,dy=0;
+let score=40;
 console.log("hello");
 class Level{
 	constructor(level){
@@ -10,6 +11,27 @@ class Level{
 	}
 	get number(){
 		return this.level;
+	}
+	get newLevel(){
+		console.log(score);
+		if(score==20)
+			return new Level(2);
+		if(score==40)
+			return new Level(3);
+		if(score==60)
+			return new Level(4);
+		if(score==80)
+			return new Level(5);
+		if(score==100)
+		{	window.alert("You win");
+
+			console.log(this.interval);
+		
+			return new Level(20);
+		}
+		else{
+			return this;
+		}
 	}
 }
 class Mines {
@@ -55,12 +77,38 @@ class Draw{
 			
 	}
 	drawMines(mines){
-		if(mines.length!=0)
+		if(mines&&mines.length!=0)
 		{
 			mines.forEach(this.drawMine);
 		}
 	}
-	drawWalls(){
+	drawWall(x,y,size){
+		console.log("Bangyi diwar "+size+" "+x+" "+y);
+		ctx.fillStyle="brown";
+		ctx.strokeStyle="black";
+		ctx.fillRect(x,y,9,size);
+		ctx.strokeRect(x,y,9,size);
+
+	}
+	drawWalls(snake,level,size1){
+		if(level==5){
+			console.log("Wall");
+		let size=0,minx1=0,miny1=0,minx2=300,miny2=300;
+		console.log(canvas.width);
+		minx1=canvas.width/3;
+
+		miny1=0;
+		if(minx1==snake.x)
+		{
+			minx1-=20;	
+		}
+		// console.log(size)
+		this.drawWall(minx1,miny1,size1);
+		}// minx2=Math.min(snake.pos[i].x,minx2);
+		// miny2=Math.min(snake.pos[i].y,miny2);
+		// }
+
+
 
 	}
 	draw(thing){
@@ -109,42 +157,41 @@ class Apple {
 class Move extends Draw{
 	constructor(runner,level){
 		super();
-
+		this.LEVEL=level;//level obj
 		this.level=level.number;
-		console.log(this.level);
 		this.runner=runner;
 		this.dir="none";
 		this.interval="";
-
 		this.run=true;
 		this.dx=0;
 		this.dy=0;
+		this.Flag1=true;
+		this.Flag2=true;
 		this.speed=level.speed;
 		this.apple=new Apple(200,250);
 		this.mines=[];
-		if(this.level>=2)
-		{
-			for(let i=0;i<this.level*3;i++)
-			{
-				let x=parseInt(Math.floor(Math.random()*24+1))*10;
-				let y=parseInt(Math.floor(Math.random()*24+1))*10;
-				if((this.runner.x==x&&this.runner.y==y)||(this.apple.x==x&&this.apple.y==y)) continue;
-				this.mines.push(new Mines(x,y));
-			}
-
-		}
+		this.size1=0;
+		this.size2=0;
 		// this.speed=Level.speed;
 // 
 		// this.drawSnakeII=drawSnake;
 		console.log(this.runner.pos)
 		this.draw(this.apple);
-
+		this.Flag3=true;
 		this.draw(this.runner);
 		this.move();						// console.log(this);
 
 
 	}
-
+	set levelnumber(l){
+		this.level=l;
+	}
+	set sizeFirstWall(size1){
+		this.size1=size1;
+	}
+	set sizeSecondWall(size2){
+		this.size2=size2;
+	}
 
 	moveSnakeCanvas(){			
 		ctx.clearRect(0, 0, canvas.width,canvas.height);// Clear the Canvas
@@ -152,7 +199,7 @@ class Move extends Draw{
 
 		this.runner.y+=this.dy;
 		let snake=this.runner;
-
+		console.log("Level"+this.level);
 		for(let i=0;i<this.runner.pos.length;i++)
 			{
 				if(this.runner.x==this.runner.pos[i].x && this.runner.y==this.runner.pos[i].y)
@@ -163,7 +210,23 @@ class Move extends Draw{
 			    }
 
 			}
+
 			//level 4 wall at boundaries boundaries
+			if((this.level==2&&this.Flag1)||(this.level==4&&this.Flag2)){// this.mines=new Array();
+				// this.mines=[];
+				if(this.level==2) this.Flag1=false;
+				if(this.level==4) this.Flag2=false;
+				
+				for(let i=0;i<parseInt(this.level*3.9);i++)
+				{
+				let x=parseInt(Math.floor(Math.random()*39+1))*10;
+				let y=parseInt(Math.floor(Math.random()*39+1))*10;
+				if((this.runner.x==x&&this.runner.y==y)||(this.apple.x==x&&this.apple.y==y)) continue;
+				{this.mines.push(new Mines(x,y));}
+		
+
+				}
+			}
 			if(this.level>=4)
 			{
 				document.getElementById("game").style.border=`3px solid black`;
@@ -182,27 +245,33 @@ class Move extends Draw{
 			this.runner.x%=canvas.width;
 			if(this.runner.y>0)
 			this.runner.y%=canvas.height;
-			  for(let i=0;i<this.mines.length;i++)
-		  {
+			 if(this.mines){
+			 for(let i=0;i<this.mines.length;i++)
+		  	{
 		  	if(this.runner.x==this.mines[i].x&&this.runner.y==this.mines[i].y)
 		  	{
 			      clearInterval(this.interval);
 			  		console.log("gameOver Mine");
 			  		return;
 		  	}
-		  }
+		  }}
 
 		  this.runner.pos.unshift({x: this.runner.x , y: this.runner.y}) ; // Insert at 0th position
-		  	console.log(this.apple.x);
-		  	console.log(this.apple.y);
-		  	console.log(this.runner);
+		  	// console.log(this.apple.x);
+		  	// console.log(this.apple.y);
+		  	// console.log(this.runner);
 		  if(this.runner.x===this.apple.x && this.runner.y===this.apple.y){
-		  	this.apple.x=parseInt(Math.floor(Math.random()*24+1));
+		  	this.apple.x=parseInt(Math.floor(Math.random()*35+1));
 
-			this.apple.y=parseInt(Math.floor(Math.random()*24+1));
-			
+			this.apple.y=parseInt(Math.floor(Math.random()*35+1));
+			score+=10;
 			this.apple.x*=10;
     		this.apple.y*=10;
+    		this.LEVEL=this.LEVEL.newLevel;//level obj
+    		
+    		this.levelnumber=this.LEVEL.number;//level number
+    		// console.log("Score: "+this.level+" "+score);
+    		// 
 		  	// this.apple.x*=16;this.apple.*=16;
 		  }
 		 else this.runner.pos.pop();
@@ -221,7 +290,8 @@ class Move extends Draw{
   		// here.dx=12;
   		// here.moveSnakeCanvas();
   		// 	},100)
-  		
+  		let Flag3=true;
+  		let size1=0,size2=0;
   		document.addEventListener('keydown',(e)=>{
 			if(this.run){
 				// let here=this;
@@ -233,11 +303,34 @@ class Move extends Draw{
 									clearInterval(this.interval);
 									let here=this;
 									console.log(here);
+
+									console.log("Score "+score+" Level "+here.level);	
 									here.interval=setInterval((e)=>{
 										here.dx=-10;here.dy=0;
 										here.moveSnakeCanvas();
 										here.draw(here.apple);
 										here.drawMines(here.mines);
+										if(here.level==5&&Flag3){
+											Flag3=false;
+										// let size1=0;
+										for(let i=0;i<here.runner.pos.length;i++)
+											size1=parseInt(Math.max(here.runner.pos[i].y,size1));
+										size1-=10;
+										if(size1<=0)
+										{
+											size1*=-1;
+											size1%=10+1;
+										}
+										
+
+										console.log("Size: "+size1);
+										here.drawWalls(here.runner,here.level,size1);
+
+										}
+										else{
+										here.drawWalls(here.runner,here.level,size1);
+										}
+
 									},180);
 									this.dir='left';
 								}
@@ -248,13 +341,38 @@ class Move extends Draw{
 									clearInterval(this.interval);
 									let here=this;
 									console.log(here);
+									console.log("Score "+score);	
 									here.interval=setInterval((e)=>{
 										here.dx=10;here.dy=0;
 										here.moveSnakeCanvas();
 									
 										here.draw(here.apple);
 
-										here.drawMines(here.mines);},180);
+										here.drawMines(here.mines);
+										if(here.level==5&&Flag3){
+											Flag3=false;
+										// let size1=0;
+										for(let i=0;i<here.runner.pos.length;i++)
+											size1=parseInt(Math.max(here.runner.pos[i].y,size1));
+										size1-=10;
+										if(size1<=0)
+										{
+											size1*=-1;
+											size1%=10+1;
+										}
+										
+
+										console.log("Size: "+size1);
+										here.drawWalls(here.runner,here.level,size1);
+
+										}
+										else{
+										here.drawWalls(here.runner,here.level,size1);
+										}
+
+
+									},180);
+										
 									this.dir='right';
 								}
 						break;
@@ -264,11 +382,33 @@ class Move extends Draw{
 									clearInterval(this.interval);
 									let here=this;
 									console.log(here);
+									console.log("Score "+score);	
 									here.interval=setInterval((e)=>{
 										here.dx=0;here.dy=-10;
 										here.moveSnakeCanvas();
 										here.draw(here.apple);
 										here.drawMines(here.mines);
+										if(here.level==5&&Flag3){
+											Flag3=false;
+										// let size1=0;
+										for(let i=0;i<here.runner.pos.length;i++)
+											size1=parseInt(Math.max(here.runner.pos[i].y,size1));
+										size1-=10;
+										if(size1<=0)
+										{
+											size1*=-1;
+											size1%=10+1;
+										}
+										
+
+										console.log("Size: "+size1);
+										here.drawWalls(here.runner,here.level,size1);
+
+										}
+										else{
+										here.drawWalls(here.runner,here.level,size1);
+										}
+
 									},180);
 									this.dir='up';
 								}
@@ -279,11 +419,34 @@ class Move extends Draw{
 									clearInterval(this.interval);
 									let here=this;
 									console.log(here);
+									console.log("Score "+score);	
 									here.interval=setInterval((e)=>{
 										here.dx=0;here.dy=10;
 										here.moveSnakeCanvas();
 										here.draw(here.apple);
 										here.drawMines(here.mines);
+										if(here.level==5&&Flag3){
+											Flag3=false;
+										// let size1=0;
+										for(let i=0;i<here.runner.pos.length;i++)
+											size1=parseInt(Math.max(here.runner.pos[i].y,size1));
+										size1-=10;
+										if(size1<=0)
+										{
+											size1*=-1;
+											size1%=10+1;
+										}
+										
+
+										console.log("Size: "+size1);
+										here.drawWalls(here.runner,here.level,size1);
+
+										}
+										else{
+										here.drawWalls(here.runner,here.level,size1);
+										}
+
+										
 									},180);
 									this.dir='down';
 								}
@@ -310,11 +473,12 @@ function domElt(name,attrs,...children){
 	return dom;
 }
 
-class State{
-	constructor(level,actors,status){
+class State {
+	constructor(level,status){
 		this.level=level;
-		this.actors=actors;
+		// this.actors=actors;
 		this.status=status;
+
 		console.log(this.status);
 		if(this.status=="playing")
 		{
@@ -327,17 +491,17 @@ class State{
 	playing(){
 				
 		let snakeTest= new Snake(150,150,[  {x: 150, y: 150}],1);
-		let test=new Draw(new Level(2));
+		// let test=new Draw(new Level(2));
 		// test.draw(snakeTest);
 		// console.log(test.draw);
 		let move=new Move(snakeTest,this.level);//,new Draw());
 	}
 	static start(level){
-		return new State(level,level.startActors,"playing");
+		return new State(level,"playing");
 	}
 
 	static paused(level){
-		return new State(level,level.startActors,"paused");
+		return new State(level,"paused");
 	}
 }
-let test1=State.start(new Level(2));
+let test1=State.start(new Level(1));
