@@ -1,7 +1,7 @@
 const canvas=document.getElementById("game");
 const ctx=canvas.getContext("2d");
 let dx=0,dy=0;
-let score=40;
+let score=60;
 console.log("hello");
 class Level{
 	constructor(level){
@@ -82,28 +82,37 @@ class Draw{
 			mines.forEach(this.drawMine);
 		}
 	}
-	drawWall(x,y,size){
+	drawWall(x,y,size,color){
 		console.log("Bangyi diwar "+size+" "+x+" "+y);
-		ctx.fillStyle="brown";
+		ctx.fillStyle=color;//"brown";
 		ctx.strokeStyle="black";
 		ctx.fillRect(x,y,9,size);
 		ctx.strokeRect(x,y,9,size);
 
 	}
-	drawWalls(snake,level,size1){
+	drawWalls(snake,level,size1,size2){
 		if(level==5){
 			console.log("Wall");
 		let size=0,minx1=0,miny1=0,minx2=300,miny2=300;
-		console.log(canvas.width);
-		minx1=canvas.width/3;
+		// console.log(canvas.width);
+		minx1=canvas.width-canvas.width/3;
 
 		miny1=0;
 		if(minx1==snake.x)
 		{
 			minx1-=20;	
 		}
+		minx2=canvas.height/3;
+
+		miny2=canvas.height-canvas.height/3;
+		if(minx2==snake.x)
+		{
+			minx2-=20;	
+		}
 		// console.log(size)
-		this.drawWall(minx1,miny1,size1);
+		this.drawWall(minx1,miny1,size1,"pink");
+
+		this.drawWall(minx2,miny2,size2,"brown");
 		}// minx2=Math.min(snake.pos[i].x,minx2);
 		// miny2=Math.min(snake.pos[i].y,miny2);
 		// }
@@ -170,8 +179,7 @@ class Move extends Draw{
 		this.speed=level.speed;
 		this.apple=new Apple(200,250);
 		this.mines=[];
-		this.size1=0;
-		this.size2=0;
+
 		// this.speed=Level.speed;
 // 
 		// this.drawSnakeII=drawSnake;
@@ -186,12 +194,7 @@ class Move extends Draw{
 	set levelnumber(l){
 		this.level=l;
 	}
-	set sizeFirstWall(size1){
-		this.size1=size1;
-	}
-	set sizeSecondWall(size2){
-		this.size2=size2;
-	}
+	
 
 	moveSnakeCanvas(){			
 		ctx.clearRect(0, 0, canvas.width,canvas.height);// Clear the Canvas
@@ -315,6 +318,9 @@ class Move extends Draw{
 										// let size1=0;
 										for(let i=0;i<here.runner.pos.length;i++)
 											size1=parseInt(Math.max(here.runner.pos[i].y,size1));
+										for(let i=0;i<here.runner.pos.length;i++)
+											size2=parseInt(Math.max(here.runner.pos[i].y,size2));
+										
 										size1-=10;
 										if(size1<=0)
 										{
@@ -323,12 +329,19 @@ class Move extends Draw{
 										}
 										
 
+										size2-=10;
+										if(size2<=0)
+										{
+											size2*=-1;
+											size2%=10+1;
+										}
+										
 										console.log("Size: "+size1);
-										here.drawWalls(here.runner,here.level,size1);
+										here.drawWalls(here.runner,here.level,size1,size2);
 
 										}
 										else{
-										here.drawWalls(here.runner,here.level,size1);
+										here.drawWalls(here.runner,here.level,size1,size2);
 										}
 
 									},180);
@@ -351,9 +364,12 @@ class Move extends Draw{
 										here.drawMines(here.mines);
 										if(here.level==5&&Flag3){
 											Flag3=false;
-										// let size1=0;
+
 										for(let i=0;i<here.runner.pos.length;i++)
 											size1=parseInt(Math.max(here.runner.pos[i].y,size1));
+										for(let i=0;i<here.runner.pos.length;i++)
+											size2=parseInt(Math.max(here.runner.pos[i].y,size2));
+										
 										size1-=10;
 										if(size1<=0)
 										{
@@ -362,12 +378,18 @@ class Move extends Draw{
 										}
 										
 
+										size2-=10;
+										if(size2<=0)
+										{
+											size2*=-1;
+											size2%=10+1;
+										}
+										
 										console.log("Size: "+size1);
-										here.drawWalls(here.runner,here.level,size1);
-
+										here.drawWalls(here.runner,here.level,size1,size2);
 										}
 										else{
-										here.drawWalls(here.runner,here.level,size1);
+										here.drawWalls(here.runner,here.level,size1,size2);
 										}
 
 
@@ -390,9 +412,12 @@ class Move extends Draw{
 										here.drawMines(here.mines);
 										if(here.level==5&&Flag3){
 											Flag3=false;
-										// let size1=0;
+										
 										for(let i=0;i<here.runner.pos.length;i++)
 											size1=parseInt(Math.max(here.runner.pos[i].y,size1));
+										for(let i=0;i<here.runner.pos.length;i++)
+											size2=parseInt(Math.max(here.runner.pos[i].y,size2));
+										
 										size1-=10;
 										if(size1<=0)
 										{
@@ -401,14 +426,19 @@ class Move extends Draw{
 										}
 										
 
+										size2-=10;
+										if(size2<=0)
+										{
+											size2*=-1;
+											size2%=10+1;
+										}
+										
 										console.log("Size: "+size1);
-										here.drawWalls(here.runner,here.level,size1);
-
+										here.drawWalls(here.runner,here.level,size1,size2);
 										}
 										else{
-										here.drawWalls(here.runner,here.level,size1);
+										here.drawWalls(here.runner,here.level,size1,size2);
 										}
-
 									},180);
 									this.dir='up';
 								}
@@ -427,9 +457,12 @@ class Move extends Draw{
 										here.drawMines(here.mines);
 										if(here.level==5&&Flag3){
 											Flag3=false;
-										// let size1=0;
+										
 										for(let i=0;i<here.runner.pos.length;i++)
 											size1=parseInt(Math.max(here.runner.pos[i].y,size1));
+										for(let i=0;i<here.runner.pos.length;i++)
+											size2=parseInt(Math.max(here.runner.pos[i].y,size2));
+										
 										size1-=10;
 										if(size1<=0)
 										{
@@ -438,12 +471,18 @@ class Move extends Draw{
 										}
 										
 
+										size2-=10;
+										if(size2<=0)
+										{
+											size2*=-1;
+											size2%=10+1;
+										}
+										
 										console.log("Size: "+size1);
-										here.drawWalls(here.runner,here.level,size1);
-
+										here.drawWalls(here.runner,here.level,size1,size2);
 										}
 										else{
-										here.drawWalls(here.runner,here.level,size1);
+										here.drawWalls(here.runner,here.level,size1,size2);
 										}
 
 										
