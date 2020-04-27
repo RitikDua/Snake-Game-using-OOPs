@@ -103,7 +103,23 @@ class Move extends Draw{
 
 		for(let i=0;i<this.runner.pos.length;i++)
 			{
+				if(this.runner.x==this.runner.pos[i].x && this.runner.y==this.runner.pos[i].y)
+			    {
+			      clearInterval(this.interval);
+			  		console.log("gameOver");
+			  		return;
+			    }
+
 			}
+			if(this.runner.x<0)
+			this.runner.x=canvas.width-this.runner.x*-1;
+			if(this.runner.y<0)
+			this.runner.y=canvas.height-this.runner.y*-1;
+			if(this.runner.x>0)
+			this.runner.x%=canvas.width;
+			if(this.runner.y>0)
+			this.runner.y%=canvas.height;
+			
 		  this.runner.pos.unshift({x: this.runner.x , y: this.runner.y}) ; // Insert at 0th position
 		  	console.log(this.apple.x);
 		  	console.log(this.apple.y);
