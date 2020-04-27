@@ -60,6 +60,9 @@ class Draw{
 			mines.forEach(this.drawMine);
 		}
 	}
+	drawWalls(){
+
+	}
 	draw(thing){
 		console.log((thing.type==="snake"));
 		if(thing.type==="snake")
@@ -128,6 +131,7 @@ class Move extends Draw{
 				if((this.runner.x==x&&this.runner.y==y)||(this.apple.x==x&&this.apple.y==y)) continue;
 				this.mines.push(new Mines(x,y));
 			}
+
 		}
 		// this.speed=Level.speed;
 // 
@@ -159,6 +163,17 @@ class Move extends Draw{
 			    }
 
 			}
+			//level 4 wall at boundaries boundaries
+			if(this.level>=4)
+			{
+				document.getElementById("game").style.border=`3px solid black`;
+				if(this.runner.x>=canvas.width||this.runner.y>=canvas.height||this.runner.y<=0||this.runner.x<=0)
+				{
+					clearInterval(this.interval);
+					console.log("gameOver Wall");
+					return;
+				}
+			}
 			if(this.runner.x<0)
 			this.runner.x=canvas.width-this.runner.x*-1;
 			if(this.runner.y<0)
@@ -172,7 +187,7 @@ class Move extends Draw{
 		  	if(this.runner.x==this.mines[i].x&&this.runner.y==this.mines[i].y)
 		  	{
 			      clearInterval(this.interval);
-			  		console.log("gameOver");
+			  		console.log("gameOver Mine");
 			  		return;
 		  	}
 		  }
@@ -311,7 +326,7 @@ class State{
 	}
 	playing(){
 				
-		let snakeTest= new Snake(150,150,[  {x: 150, y: 150},  {x: 140, y: 150},  {x: 130, y: 150},  {x: 120, y: 150},  {x: 110, y: 150},],1);
+		let snakeTest= new Snake(150,150,[  {x: 150, y: 150}],1);
 		let test=new Draw(new Level(2));
 		// test.draw(snakeTest);
 		// console.log(test.draw);
