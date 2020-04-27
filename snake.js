@@ -3,13 +3,29 @@ const ctx=canvas.getContext("2d");
 let dx=0,dy=0;
 console.log("hello");
 class Level{
-	constructor(){
+	constructor(level){
 		this.startActors=[];
 		this.speed=1;
-		
+		this.level=level;
+	}
+	get number(){
+		return this.level;
+	}
+}
+class Mines {
+	constructor(x,y){
+		this.x=x;
+		// console.log(this.level.number);
+		this.y=y;
+	}
+	get type(){
+		return "mine";
 	}
 }
 class Draw{
+	// constructor(level){
+	// 	this.level=level.number;
+	// }
 
 	drawSnakePart(snakePart){
 		ctx.fillStyle="lightgreen";
@@ -31,6 +47,19 @@ class Draw{
 		ctx.fillRect(thing.x,thing.y,9,9);
 		ctx.strokeRect(thing.x,thing.y,9,9); 
 	}
+	drawMine(mine){
+		ctx.fillStyle="black";
+		ctx.strokeStyle="grey";
+		ctx.fillRect(mine.x,mine.y,9,9);
+		ctx.strokeRect(mine.x,mine.y,9,9);
+			
+	}
+	drawMines(mines){
+		if(mines.length!=0)
+		{
+			mines.forEach(this.drawMine);
+		}
+	}
 	draw(thing){
 		console.log((thing.type==="snake"));
 		if(thing.type==="snake")
@@ -39,6 +68,10 @@ class Draw{
 		}
 		else if(thing.type==="apple"){
 			this.drawApple(thing);
+		}
+		else if(thing.type==="mine")
+		{
+			this.drawMine(thing);
 		}
 		else{
 			this.drawSomthing(thing);
@@ -59,7 +92,7 @@ class Snake{
 
 }
 let bug=0;
-class Apple{
+class Apple {
 	constructor(x,y){
 		this.x=x;
 		this.y=y;
@@ -71,16 +104,31 @@ class Apple{
 
 }
 class Move extends Draw{
-	constructor(runner,speed){
+	constructor(runner,level){
 		super();
+
+		this.level=level.number;
+		console.log(this.level);
 		this.runner=runner;
 		this.dir="none";
 		this.interval="";
+
 		this.run=true;
 		this.dx=0;
 		this.dy=0;
-		this.speed=speed;
+		this.speed=level.speed;
 		this.apple=new Apple(200,250);
+		this.mines=[];
+		if(this.level>=2)
+		{
+			for(let i=0;i<this.level*3;i++)
+			{
+				let x=parseInt(Math.floor(Math.random()*24+1))*10;
+				let y=parseInt(Math.floor(Math.random()*24+1))*10;
+				if((this.runner.x==x&&this.runner.y==y)||(this.apple.x==x&&this.apple.y==y)) continue;
+				this.mines.push(new Mines(x,y));
+			}
+		}
 		// this.speed=Level.speed;
 // 
 		// this.drawSnakeII=drawSnake;
@@ -119,7 +167,16 @@ class Move extends Draw{
 			this.runner.x%=canvas.width;
 			if(this.runner.y>0)
 			this.runner.y%=canvas.height;
-			
+			  for(let i=0;i<this.mines.length;i++)
+		  {
+		  	if(this.runner.x==this.mines[i].x&&this.runner.y==this.mines[i].y)
+		  	{
+			      clearInterval(this.interval);
+			  		console.log("gameOver");
+			  		return;
+		  	}
+		  }
+
 		  this.runner.pos.unshift({x: this.runner.x , y: this.runner.y}) ; // Insert at 0th position
 		  	console.log(this.apple.x);
 		  	console.log(this.apple.y);
@@ -133,7 +190,9 @@ class Move extends Draw{
     		this.apple.y*=10;
 		  	// this.apple.x*=16;this.apple.*=16;
 		  }
-		  else this.runner.pos.pop();
+		 else this.runner.pos.pop();
+		
+		
 		this.draw(this.runner);
 		
 	}
@@ -163,6 +222,7 @@ class Move extends Draw{
 										here.dx=-10;here.dy=0;
 										here.moveSnakeCanvas();
 										here.draw(here.apple);
+										here.drawMines(here.mines);
 									},180);
 									this.dir='left';
 								}
@@ -177,7 +237,9 @@ class Move extends Draw{
 										here.dx=10;here.dy=0;
 										here.moveSnakeCanvas();
 									
-										here.draw(here.apple);},180);
+										here.draw(here.apple);
+
+										here.drawMines(here.mines);},180);
 									this.dir='right';
 								}
 						break;
@@ -191,6 +253,7 @@ class Move extends Draw{
 										here.dx=0;here.dy=-10;
 										here.moveSnakeCanvas();
 										here.draw(here.apple);
+										here.drawMines(here.mines);
 									},180);
 									this.dir='up';
 								}
@@ -205,6 +268,7 @@ class Move extends Draw{
 										here.dx=0;here.dy=10;
 										here.moveSnakeCanvas();
 										here.draw(here.apple);
+										here.drawMines(here.mines);
 									},180);
 									this.dir='down';
 								}
@@ -248,10 +312,10 @@ class State{
 	playing(){
 				
 		let snakeTest= new Snake(150,150,[  {x: 150, y: 150},  {x: 140, y: 150},  {x: 130, y: 150},  {x: 120, y: 150},  {x: 110, y: 150},],1);
-		let test=new Draw();
+		let test=new Draw(new Level(2));
 		// test.draw(snakeTest);
 		// console.log(test.draw);
-		let move=new Move(snakeTest,this.level.speed);//,new Draw());
+		let move=new Move(snakeTest,this.level);//,new Draw());
 	}
 	static start(level){
 		return new State(level,level.startActors,"playing");
@@ -261,4 +325,4 @@ class State{
 		return new State(level,level.startActors,"paused");
 	}
 }
-let test1=State.start(new Level());
+let test1=State.start(new Level(2));
