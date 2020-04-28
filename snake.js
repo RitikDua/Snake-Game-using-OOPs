@@ -292,6 +292,7 @@ class Move extends Draw{
     		this.LEVEL=this.LEVEL.newLevel;//level obj
     		
     		this.levelnumber=this.LEVEL.number;//level number
+    		
     		if(this.levelnumber==20)//Winner
     		{
     			clearInterval(this.interval);
@@ -299,7 +300,10 @@ class Move extends Draw{
 				this.result=new State(this.level,"win");
     			return; 
     		}
+    		else{
 
+			scoreBoard(this.level);
+    		}
 		  }
 		 else this.runner.pos.pop();
 		
@@ -523,6 +527,7 @@ class Move extends Draw{
 										
 									},116-parseInt(this.level-parseInt(this.level*3.9)));
 									this.dir='down';
+
 								}
 						break;
 						case 32: console.log("Paused");//forPause
@@ -535,7 +540,7 @@ class Move extends Draw{
 
 }
 
-function domElt(name,attrs,...children){
+function elt(name,attrs,...children){
 	let dom=document.createElement(name);
 	for (let i of Object.keys(attrs)){
 		dom.setAttribute(i,attrs[i]);
@@ -590,5 +595,7 @@ class State  {
 	}
 }
 let test1=State.start(new Level(1));
-
+function scoreBoard(level){
+		
+}
 // functij
