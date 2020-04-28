@@ -2,9 +2,7 @@ const canvas=document.getElementById("game");
 const ctx=canvas.getContext("2d");
 let dx=0,dy=0;
 let score=0;
-let points=1;
-
-//console.log("hello");
+let points=1;//change this to 10 for testing
 
 class Level{
 	constructor(level){
@@ -677,9 +675,12 @@ class State  {
 	}
 	win(){
 		//console.log('Win');
+		window.alert("Oh you lose");
+	
 	}
 	exit(){
 		//console.log(this.reasons);
+		window.alert("Oh you lose");
 	}
 	playing(){
 				
