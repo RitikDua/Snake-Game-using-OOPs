@@ -50,7 +50,8 @@ class Draw{
 	// 	this.level=level.number;
 	// }
 	constructor(){
-		this.walls=[];
+		this.wall1=[];
+		this.wall2=[];
 	}
 	get getWalls(){
 		return this.walls;
@@ -62,68 +63,134 @@ class Draw{
 		ctx.strokeRect(snakePart.x,snakePart.y,9,9);
 			
 	}
-	drawSnake(snake){
-		
+	drawSnake(snake,...rotation){
+	// let rt='right'; 
+	// 	if(rotation)
+	// 		rt=rotation.pop();
+	// 	let img=new Image();
+	// 	img.src="./img/snake"+rt+".png";
+	// 	ctx.drawImage(img,snake.x,snake.y,13,13);
 		snake.pos.forEach(this.drawSnakePart);
 	}
 	drawSomthing(thing){
 		//console.log("drawSometghing"+thing.type);
 	}
 	drawApple(thing){
-		ctx.fillStyle="red";
-		ctx.strokeStyle="darkred";
-		ctx.fillRect(thing.x,thing.y,9,9);
-		ctx.strokeRect(thing.x,thing.y,9,9); 
+	
+		let img=new Image();
+		img.src="./img/apple1.png";
+		ctx.drawImage(img,thing.x,thing.y,13,13);
+		// ctx.fillStyle="red";
+		// ctx.strokeStyle="darkred";
+		// ctx.fillRect(thing.x,thing.y,9,9);
+		// ctx.strokeRect(thing.x,thing.y,9,9); 
 	}
 	drawMine(mine){
-		ctx.fillStyle="black";
-		ctx.strokeStyle="grey";
-		ctx.fillRect(mine.x,mine.y,9,9);
-		ctx.strokeRect(mine.x,mine.y,9,9);
+		let img=new Image();
+		img.src="./img/mine.png";
+		ctx.drawImage(img,mine.x,mine.y,13,13);
+		// ctx.fillStyle="black";
+		// ctx.strokeStyle="grey";
+		// ctx.fillRect(mine.x,mine.y,9,9);
+		// ctx.strokeRect(mine.x,mine.y,9,9);
 			
 	}
-	drawMines(mines){
-		if(mines&&mines.length!=0)
-		{
-			mines.forEach(this.drawMine);
-		}
-	}
-	drawWall(x,y,size,color){
+	drawBrick(x,y){
 		//console.log("Bangyi diwar "+size+" "+x+" "+y);
-		ctx.fillStyle=color;//"brown";
+		ctx.fillStyle="brown";
 		ctx.strokeStyle="black";
-		ctx.fillRect(x,y,9,size);
-		ctx.strokeRect(x,y,9,size);
-		this.walls.push(new Array([x,y]));
+		ctx.fillRect(x,y,9,9);
+		ctx.strokeRect(x,y,9,9);
+		// this.walls.push(new Array([x,y]));
 	}
-	drawWalls(snake,level,size1,size2){
-		if(level==5){
+	drawWallsI(snake){
+		// if(level==5){
+
 			//console.log("Wall");
-		let size=0,minx1=0,miny1=0,minx2=300,miny2=300;
-		// //console.log(canvas.width);
-		minx1=canvas.width-canvas.width/3;
+		// let size=0,minx1=0,miny1=0,minx2=300,miny2=300;
+		// // //console.log(canvas.width);
+		// minx1=canvas.width-canvas.width/3;
 
-		miny1=0;
-		if(minx1==snake.x)
-		{
-			minx1-=20;	
-		}
-		minx2=canvas.height/3;
+		// miny1=0;
+		// if(minx1==snake.x)
+		// {
+		// 	minx1-=20;	
+		// }
+		// minx2=canvas.height/3;
 
-		miny2=canvas.height-canvas.height/3;
-		if(minx2==snake.x)
-		{
-			minx2-=20;	
-		}
+		// miny2=canvas.height-canvas.height/3;
+		// if(minx2==snake.x)
+		// {
+		// 	minx2-=20;	
+		// }
 		// //console.log(size)
-		this.drawWall(minx1,miny1,size1,"pink");
+		let min1,min2,max1,max2;
+		min1=1000000;
+		min2=1000000;
+		max1=0;
+		max2=0;
+		for(let i=0;i<snake.length;i++)
+		{
+			min1=Math.min(snake[i].x,min1);
+			min2=Math.min(snake[i].y,min2);
+			max1=Math.max(snake[i].x,max1);
+			max2=Math.max(snake[i].y,max2);
+				
+		}
+		let x1=min1,y1=0,wall=[];
+		while(y1<max2-20)
+		{	wall.push({x:x1,y:y1})
+			this.wall1.push({x:x1,y:y1});
+			if(y1<max2-20)
+				y1+=10;
+		}
 
-		this.drawWall(minx2,miny2,size2,"brown");
-		}// minx2=Math.min(snake.pos[i].x,minx2);
+		for(let i=0;i<wall.length;i++)
+		{
+			let obj=wall[i];
+			this.drawBrick(obj.x,obj.y);
+		}x1=max1+20;y1=0;
+		wall=[];
+		while(y1<min2-20)
+		{	wall.push({x:x1,y:y1})
+			this.wall1.push({x:x1,y:y1});
+			if(y1<max2-20)
+				y1+=10;
+		}
+
+		for(let i=0;i<wall.length;i++)
+		{
+			let obj=wall[i];
+			this.drawBrick(obj.x,obj.y);
+		}
+		// this.drawBrick(minx2,miny2,size2,"brown");
+		// }// minx2=Math.min(snake.pos[i].x,minx2);
 		// miny2=Math.min(snake.pos[i].y,miny2);
 		// }
 
 
+
+	}
+
+	drawMines(mines,snake){
+		if(mines&&mines.length!=0)
+		{
+			mines.forEach(this.drawMine);
+		}
+		if(snake&&snake.length!=0)
+		{
+			this.drawWallsI(snake);
+		}
+	}
+	get getWallsI(){
+		return this.wall1;
+	}
+
+	get getWallsII(){
+		return this.wall2;
+	}
+	drawWalls(snake,l)
+	{
 
 	}
 	draw(thing){
@@ -172,6 +239,8 @@ class Apple {
 class Move extends Draw{
 	constructor(runner,level){
 		super();
+		this.counter=true;
+		this.snake=[];
 		this.LEVEL=level;//level obj
 		this.level=level.number;
 		this.runner=runner;
@@ -182,6 +251,7 @@ class Move extends Draw{
 		this.dy=0;
 		this.Flag1=true;
 		this.Flag2=true;
+		this.Flag3=true;
 		this.speed=level.speed;
 		this.apple=new Apple(200,250);
 		this.mines=[];
@@ -209,7 +279,7 @@ class Move extends Draw{
 	}
 	
 
-	moveSnakeCanvas(){			
+	moveSnakeCanvas(...rotation){			
 		ctx.clearRect(0, 0, canvas.width,canvas.height);// Clear the Canvas
 		this.runner.x+=this.dx;
 
@@ -244,9 +314,15 @@ class Move extends Draw{
 
 				}
 			}
+			if(this.level==5&&this.counter)
+			{this.counter=false;
+				for(let i=0;i<this.runner.pos.length;i++)
+				this.snake.push({x:this.runner.pos[i].x,y:this.runner.pos[i].y})
+
+			}
 			if(this.level>=4)
 			{
-				document.getElementById("game").style.border=`3px solid black`;
+				document.getElementById("game").style.border=`6px solid rgba(101,67,33,0.9)`;
 				if(this.runner.x>=canvas.width||this.runner.y>=canvas.height||this.runner.y<=0||this.runner.x<=0)
 				{
 					clearInterval(this.interval);
@@ -256,7 +332,30 @@ class Move extends Draw{
 					return;
 				}
 			}
-
+			if(this.level==5&&this.getWallsI!=undefined)
+			{	let wall=this.getWallsI;
+				 for(let i=0;i<wall.length;i++)
+		  	{
+		  	if(this.runner.x==wall[i].x&&this.runner.y==wall[i].y)
+		  	{
+			      clearInterval(this.interval);
+			  		this.result=new State(this.level,"exit","Wall");
+			  		return;
+		  	}
+		  }
+			}
+			if(this.level==5&&this.getWallsII!=undefined)
+			{	let wall=this.getWallsII;
+				 for(let i=0;i<wall.length;i++)
+		  	{
+		  	if(this.runner.x==wall[i].x&&this.runner.y==wall[i].y)
+		  	{
+			      clearInterval(this.interval);
+			  		this.result=new State(this.level,"exit","Wall");
+			  		return;
+		  	}
+		  }
+			}
 			if(this.runner.x<0)
 			this.runner.x=canvas.width-this.runner.x*-1;
 			if(this.runner.y<0)
@@ -273,6 +372,11 @@ class Move extends Draw{
 			      clearInterval(this.interval);
 			  		//console.log("gameOver Mine");
 
+		// let img=new Image();
+		// img.src="./img/boom1.png";
+		// ctx.clearRect(this.mines[i].x,this.mines[i].ycanvas.width, canvas.height);
+		// console.log(this.mines[i].x+"" +this.mines[i].y)
+		// ctx.drawImage(img,this.mines[i].x,this.mines[i].y,13,13);
 					this.result=new State(this.level,"exit","Mines");
 			  		return;
 		  	}
@@ -286,7 +390,7 @@ class Move extends Draw{
 		  	this.apple.x=parseInt(Math.floor(Math.random()*45+1));
 
 			this.apple.y=parseInt(Math.floor(Math.random()*45+1));
-			score+=10;
+			score+=20;
 			this.apple.x*=10;
     		this.apple.y*=10;
     		this.LEVEL=this.LEVEL.newLevel;//level obj
@@ -308,7 +412,7 @@ class Move extends Draw{
 		 else this.runner.pos.pop();
 		
 		
-		this.draw(this.runner);
+		this.drawSnake(this.runner,rotation);
 		
 	}
 	move(){
@@ -333,45 +437,26 @@ class Move extends Draw{
 								{	if(this.interval!="")
 									clearInterval(this.interval);
 									let here=this;
-									//console.log(here);
+									console.log(here);
 
 									//console.log("Score "+score+" Level "+here.level);	
 									here.interval=setInterval((e)=>{
 										here.dx=-10;here.dy=0;
-										here.moveSnakeCanvas();
+										here.moveSnakeCanvas("left");
 										here.draw(here.apple);
 										if(here.level==5&&Flag3){
 											Flag3=false;
 										// let size1=0;
-										for(let i=0;i<here.runner.pos.length;i++)
-											size1=parseInt(Math.max(here.runner.pos[i].y,size1));
-										for(let i=0;i<here.runner.pos.length;i++)
-											size2=parseInt(Math.max(here.runner.pos[i].y,size2));
-										
-										size1-=10;
-										if(size1<=0)
-										{
-											size1*=-1;
-											size1%=10+1;
-										}
-										
-
-										size2-=10;
-										if(size2<=0)
-										{
-											size2*=-1;
-											size2%=10+1;
-										}
-										
-										//console.log("Size: "+size1);
+										here.drawWalls(here.snake);
 
 
-										here.drawMines(here.mines);
+										here.drawMines(here.mines,here.snake);
 
 										}
 										else{
 
-										here.drawMines(here.mines);
+										here.drawWalls(here.snake);
+										here.drawMines(here.mines,here.snake);
 										}
 										if(here.result) {
 											clearInterval(here.interval);
@@ -386,15 +471,15 @@ class Move extends Draw{
 								{	if(this.interval!="")
 									clearInterval(this.interval);
 									let here=this;
-									//console.log(here);
+									console.log(here);
 									//console.log("Score "+score);	
 									here.interval=setInterval((e)=>{
 										here.dx=10;here.dy=0;
-										here.moveSnakeCanvas();
+										here.moveSnakeCanvas("right");
 									
 										here.draw(here.apple);
 
-										here.drawMines(here.mines);
+										here.drawMines(here.mines,here.snake);
 										if(here.level==5&&Flag3){
 											Flag3=false;
 
@@ -418,11 +503,16 @@ class Move extends Draw{
 											size2%=10+1;
 										}
 										
-										//console.log("Size: "+size1);
-										here.drawWalls(here.runner,here.level,size1,size2);
+										here.drawWalls(here.snake);
+
+
+										here.drawMines(here.mines,here.snake);
 										}
 										else{
-										here.drawWalls(here.runner,here.level,size1,size2);
+										here.drawWalls(here.snake);
+
+
+										here.drawMines(here.mines,here.snake);
 										}if(here.result) {
 											clearInterval(here.interval);
 										}
@@ -438,13 +528,13 @@ class Move extends Draw{
 								{	if(this.interval!="")
 									clearInterval(this.interval);
 									let here=this;
-									//console.log(here);
+									console.log(here);
 									//console.log("Score "+score);	
 									here.interval=setInterval((e)=>{
 										here.dx=0;here.dy=-10;
-										here.moveSnakeCanvas();
+										here.moveSnakeCanvas("up");
 										here.draw(here.apple);
-										here.drawMines(here.mines);
+										here.drawMines(here.mines,here.snake);
 										if(here.level==5&&Flag3){
 											Flag3=false;
 										
@@ -469,10 +559,16 @@ class Move extends Draw{
 										}
 										
 										//console.log("Size: "+size1);
-										here.drawWalls(here.runner,here.level,size1,size2);
+										here.drawWalls(here.snake);
+
+
+										here.drawMines(here.mines,here.snake);
 										}
 										else{
-										here.drawWalls(here.runner,here.level,size1,size2);
+										here.drawWalls(here.snake);
+
+
+										here.drawMines(here.mines,here.snake);
 										}if(here.result) {
 											clearInterval(here.interval);
 										}
@@ -485,13 +581,13 @@ class Move extends Draw{
 								{	if(this.interval!="")
 									clearInterval(this.interval);
 									let here=this;
-									//console.log(here);
+									console.log(here);
 									//console.log("Score "+score);	
 									here.interval=setInterval((e)=>{
 										here.dx=0;here.dy=10;
-										here.moveSnakeCanvas();
+										here.moveSnakeCanvas("down");
 										here.draw(here.apple);
-										here.drawMines(here.mines);
+										here.drawMines(here.mines,here.snake);
 										if(here.level==5&&Flag3){
 											Flag3=false;
 										
@@ -516,10 +612,16 @@ class Move extends Draw{
 										}
 										
 										//console.log("Size: "+size1);
-										here.drawWalls(here.runner,here.level,size1,size2);
+										here.drawWalls(here.snake);
+
+
+										here.drawMines(here.mines,here.snake);
 										}
 										else{
-										here.drawWalls(here.runner,here.level,size1,size2);
+										here.drawWalls(here.snake);
+
+
+										here.drawMines(here.mines,here.snake);
 										}if(here.result) {
 											clearInterval(here.interval);
 										}
@@ -618,11 +720,10 @@ function scoreBoard(level){
 	
 
 	let l=elt("h1",{id:"level"});
-	l.innerHTML=level;
+	l.innerHTML=`<span style='font-size:5.3vh'>Level</span><br/>`+`<span style='font-size:5vh'>${level}</span>`;
 
 	let s=elt("h1",{id:"score"});
-	s.innerHTML=score;
-	console.log(score);
+	s.innerHTML=`<span style='font-size:6.3vh'>Score</span><br/>`+`<span style='font-size:6vh;padding-top:30vh;'>${score}</span>`;console.log(score);
 	document.getElementById("ScoreBoard").appendChild(l);
 	document.getElementById("ScoreBoard").appendChild(s);
 
