@@ -2,6 +2,8 @@ const canvas=document.getElementById("game");
 const ctx=canvas.getContext("2d");
 let dx=0,dy=0;
 let score=0;
+let points=1;
+
 //console.log("hello");
 
 class Level{
@@ -390,7 +392,7 @@ class Move extends Draw{
 		  	this.apple.x=parseInt(Math.floor(Math.random()*45+1));
 
 			this.apple.y=parseInt(Math.floor(Math.random()*45+1));
-			score+=20;
+			score+=points;
 			this.apple.x*=10;
     		this.apple.y*=10;
     		this.LEVEL=this.LEVEL.newLevel;//level obj
