@@ -2,7 +2,7 @@ const canvas=document.getElementById("game");
 const ctx=canvas.getContext("2d");
 let dx=0,dy=0;
 let score=0;
-console.log("hello");
+//console.log("hello");
 
 class Level{
 	constructor(level){
@@ -14,7 +14,7 @@ class Level{
 		return this.level;
 	}
 	get newLevel(){
-		console.log(score);
+		//console.log(score);
 		if(score==20)
 			return new Level(2);
 		if(score==40)
@@ -26,7 +26,7 @@ class Level{
 		if(score==100)
 		{	window.alert("You win");
 
-			console.log(this.interval);
+			//console.log(this.interval);
 		
 			return new Level(20);
 		}
@@ -38,7 +38,7 @@ class Level{
 class Mines {
 	constructor(x,y){
 		this.x=x;
-		// console.log(this.level.number);
+		// //console.log(this.level.number);
 		this.y=y;
 	}
 	get type(){
@@ -67,7 +67,7 @@ class Draw{
 		snake.pos.forEach(this.drawSnakePart);
 	}
 	drawSomthing(thing){
-		console.log("drawSometghing"+thing.type);
+		//console.log("drawSometghing"+thing.type);
 	}
 	drawApple(thing){
 		ctx.fillStyle="red";
@@ -89,7 +89,7 @@ class Draw{
 		}
 	}
 	drawWall(x,y,size,color){
-		console.log("Bangyi diwar "+size+" "+x+" "+y);
+		//console.log("Bangyi diwar "+size+" "+x+" "+y);
 		ctx.fillStyle=color;//"brown";
 		ctx.strokeStyle="black";
 		ctx.fillRect(x,y,9,size);
@@ -98,9 +98,9 @@ class Draw{
 	}
 	drawWalls(snake,level,size1,size2){
 		if(level==5){
-			console.log("Wall");
+			//console.log("Wall");
 		let size=0,minx1=0,miny1=0,minx2=300,miny2=300;
-		// console.log(canvas.width);
+		// //console.log(canvas.width);
 		minx1=canvas.width-canvas.width/3;
 
 		miny1=0;
@@ -115,7 +115,7 @@ class Draw{
 		{
 			minx2-=20;	
 		}
-		// console.log(size)
+		// //console.log(size)
 		this.drawWall(minx1,miny1,size1,"pink");
 
 		this.drawWall(minx2,miny2,size2,"brown");
@@ -127,7 +127,7 @@ class Draw{
 
 	}
 	draw(thing){
-		console.log((thing.type==="snake"));
+		//console.log((thing.type==="snake"));
 		if(thing.type==="snake")
 		{
 			this.drawSnake(thing);
@@ -189,13 +189,13 @@ class Move extends Draw{
 		// this.speed=Level.speed;
 // 
 		// this.drawSnakeII=drawSnake;
-		console.log(this.runner.pos)
+		//console.log(this.runner.pos)
 		this.draw(this.apple);
 		this.Flag3=true;
 		this.draw(this.runner);
 		
 		this.result=undefined;
-		this.move();						// console.log(this);
+		this.move();						// //console.log(this);
 
 
 	}
@@ -215,13 +215,13 @@ class Move extends Draw{
 
 		this.runner.y+=this.dy;
 		let snake=this.runner;
-		console.log("Level"+this.level);
+		//console.log("Level"+this.level);
 		for(let i=0;i<this.runner.pos.length;i++)
 			{
 				if(this.runner.x==this.runner.pos[i].x && this.runner.y==this.runner.pos[i].y)
 			    {
 			      clearInterval(this.interval);
-			  		console.log("gameOver");
+			  		//console.log("gameOver");
 			  		this.result=new State(this.level,"exit","self");
 			  		return;
 			    }
@@ -250,7 +250,7 @@ class Move extends Draw{
 				if(this.runner.x>=canvas.width||this.runner.y>=canvas.height||this.runner.y<=0||this.runner.x<=0)
 				{
 					clearInterval(this.interval);
-					console.log("gameOver Wall");
+					//console.log("gameOver Wall");
 					this.result=new State(this.level,"exit","Walls");
 					
 					return;
@@ -271,7 +271,7 @@ class Move extends Draw{
 		  	if(this.runner.x==this.mines[i].x&&this.runner.y==this.mines[i].y)
 		  	{
 			      clearInterval(this.interval);
-			  		console.log("gameOver Mine");
+			  		//console.log("gameOver Mine");
 
 					this.result=new State(this.level,"exit","Mines");
 			  		return;
@@ -279,9 +279,9 @@ class Move extends Draw{
 		  }}
 
 		  this.runner.pos.unshift({x: this.runner.x , y: this.runner.y}) ; // Insert at 0th position
-		  	// console.log(this.apple.x);
-		  	// console.log(this.apple.y);
-		  	// console.log(this.runner);
+		  	// //console.log(this.apple.x);
+		  	// //console.log(this.apple.y);
+		  	// //console.log(this.runner);
 		  if(this.runner.x===this.apple.x && this.runner.y===this.apple.y){
 		  	this.apple.x=parseInt(Math.floor(Math.random()*45+1));
 
@@ -317,7 +317,7 @@ class Move extends Draw{
 		this.draw(this.runner);
 		// this.moveSnakeCanvas();
   		// setInterval((e)=>{
-  		// 	console.log(e);
+  		// 	//console.log(e);
   		// here.dx=12;
   		// here.moveSnakeCanvas();
   		// 	},100)
@@ -328,14 +328,14 @@ class Move extends Draw{
 				// let here=this;
 					switch(e.keyCode){
 
-						case 37: console.log("Left");
+						case 37: //console.log("Left");
 								if(this.dir!="right")
 								{	if(this.interval!="")
 									clearInterval(this.interval);
 									let here=this;
-									console.log(here);
+									//console.log(here);
 
-									console.log("Score "+score+" Level "+here.level);	
+									//console.log("Score "+score+" Level "+here.level);	
 									here.interval=setInterval((e)=>{
 										here.dx=-10;here.dy=0;
 										here.moveSnakeCanvas();
@@ -363,7 +363,7 @@ class Move extends Draw{
 											size2%=10+1;
 										}
 										
-										console.log("Size: "+size1);
+										//console.log("Size: "+size1);
 
 
 										here.drawMines(here.mines);
@@ -381,13 +381,13 @@ class Move extends Draw{
 									this.dir='left';
 								}
 						break;
-						case 39: console.log("Right");
+						case 39: //console.log("Right");
 								if(this.dir!="left")
 								{	if(this.interval!="")
 									clearInterval(this.interval);
 									let here=this;
-									console.log(here);
-									console.log("Score "+score);	
+									//console.log(here);
+									//console.log("Score "+score);	
 									here.interval=setInterval((e)=>{
 										here.dx=10;here.dy=0;
 										here.moveSnakeCanvas();
@@ -418,7 +418,7 @@ class Move extends Draw{
 											size2%=10+1;
 										}
 										
-										console.log("Size: "+size1);
+										//console.log("Size: "+size1);
 										here.drawWalls(here.runner,here.level,size1,size2);
 										}
 										else{
@@ -433,13 +433,13 @@ class Move extends Draw{
 									this.dir='right';
 								}
 						break;
-						case 38: console.log("Up");
+						case 38: //console.log("Up");
 								if(this.dir!="down")
 								{	if(this.interval!="")
 									clearInterval(this.interval);
 									let here=this;
-									console.log(here);
-									console.log("Score "+score);	
+									//console.log(here);
+									//console.log("Score "+score);	
 									here.interval=setInterval((e)=>{
 										here.dx=0;here.dy=-10;
 										here.moveSnakeCanvas();
@@ -468,7 +468,7 @@ class Move extends Draw{
 											size2%=10+1;
 										}
 										
-										console.log("Size: "+size1);
+										//console.log("Size: "+size1);
 										here.drawWalls(here.runner,here.level,size1,size2);
 										}
 										else{
@@ -480,13 +480,13 @@ class Move extends Draw{
 									this.dir='up';
 								}
 						break;
-						case 40: console.log("Down");
+						case 40: //console.log("Down");
 								if(this.dir!="up")
 								{	if(this.interval!="")
 									clearInterval(this.interval);
 									let here=this;
-									console.log(here);
-									console.log("Score "+score);	
+									//console.log(here);
+									//console.log("Score "+score);	
 									here.interval=setInterval((e)=>{
 										here.dx=0;here.dy=10;
 										here.moveSnakeCanvas();
@@ -515,7 +515,7 @@ class Move extends Draw{
 											size2%=10+1;
 										}
 										
-										console.log("Size: "+size1);
+										//console.log("Size: "+size1);
 										here.drawWalls(here.runner,here.level,size1,size2);
 										}
 										else{
@@ -530,7 +530,7 @@ class Move extends Draw{
 
 								}
 						break;
-						case 32: console.log("Paused");//forPause
+						case 32: //console.log("Paused");//forPause
 								clearInterval(this.interval);
 					}	
 			}
@@ -559,7 +559,7 @@ class State  {
 		// this.actors=actors;
 		this.status=status;
 
-		console.log(this.status);
+		//console.log(this.status);
 		if(this.status=="playing")
 		{
 				this.playing();
@@ -572,17 +572,17 @@ class State  {
 		}
 	}
 	win(){
-		console.log('Win');
+		//console.log('Win');
 	}
 	exit(){
-		console.log(this.reasons);
+		//console.log(this.reasons);
 	}
 	playing(){
 				
 		let snakeTest= new Snake(150,150,[  {x: 150, y: 150}],1);
 		// let test=new Draw(new Level(2));
 		// test.draw(snakeTest);
-		// console.log(test.draw);
+		// //console.log(test.draw);
 		let move=new Move(snakeTest,this.level).result;
 
 	}
@@ -594,8 +594,37 @@ class State  {
 		return new State(level,"exit",...reasons);
 	}
 }
+function elt(name, attrs, ...children) {
+let dom = document.createElement(name);
+for (let attr of Object.keys(attrs)) {
+dom.setAttribute(attr, attrs[attr]);
+}
+for (let child of children) {
+dom.appendChild(child);
+}
+return dom;
+}
 let test1=State.start(new Level(1));
 function scoreBoard(level){
-		
+	let list = document.getElementById("ScoreBoard");
+
+
+	while (list.hasChildNodes()) {
+  	list.removeChild(list.firstChild);
+
+  	// list.removeFirstChild();
+
+	}
+	
+
+	let l=elt("h1",{id:"level"});
+	l.innerHTML=level;
+
+	let s=elt("h1",{id:"score"});
+	s.innerHTML=score;
+	console.log(score);
+	document.getElementById("ScoreBoard").appendChild(l);
+	document.getElementById("ScoreBoard").appendChild(s);
+
 }
 // functij

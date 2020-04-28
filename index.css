@@ -5,11 +5,50 @@
 
 }
 #ScoreBoard{
-background-color: black;
+/*background-color: black;*/
+font-weight: bold;
+border:3px solid rgba(12,12,12,0.9);
+			height:70vh;
+			width:100%;
+			border-radius: 9px;
+			background:url(img/bg6.jpg);
+			background-opacity:0.6;
 
+			margin-top:5vw;
 }
-#score #level{
+.score .level{
 	color:white;
+}
+#score{
+font-weight: bold;
+				height:30vh;
+			width:100%;
+
+	font-family: helvetica;
+	/*color:rgba(0,0,0,0);*/
+	/*font-size: 33px;*/
+
+	padding:10vh;
+		font-size:8vh;
+			outline:none;
+					background-color:rgba(121,122,121,0.6);
+
+		box-shadow: 2px 2px 2px black;
+	text-align:center;
+		color:rgba(222,180,111,1);
+		text-shadow: 2px 2px 2px black;
+	border-radius: 9px;
+background-color:rgba(100,181,153,0.9);
+}
+#level{
+	font-family: helvetica;
+		font-size:10vh;
+		background-color:rgba(121,222,121,0.6);
+		text-align:center;
+		
+		text-shadow: 2px 2px 2px black;
+		color:rgba(222,180,111,1);
+	outline:1px;
 }
 #center{
 	margin-left:12px;
