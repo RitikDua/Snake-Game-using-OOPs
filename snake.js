@@ -236,8 +236,8 @@ class Move extends Draw{
 				
 				for(let i=0;i<parseInt(this.level*4.7);i++)
 				{
-				let x=parseInt(Math.floor(Math.random()*39+1))*10;
-				let y=parseInt(Math.floor(Math.random()*39+1))*10;
+				let x=parseInt(Math.floor(Math.random()*49+1))*10;
+				let y=parseInt(Math.floor(Math.random()*49+1))*10;
 				if((this.runner.x==x&&this.runner.y==y)||(this.apple.x==x&&this.apple.y==y)) continue;
 				{this.mines.push(new Mines(x,y));}
 		
@@ -283,23 +283,23 @@ class Move extends Draw{
 		  	// console.log(this.apple.y);
 		  	// console.log(this.runner);
 		  if(this.runner.x===this.apple.x && this.runner.y===this.apple.y){
-		  	this.apple.x=parseInt(Math.floor(Math.random()*35+1));
+		  	this.apple.x=parseInt(Math.floor(Math.random()*45+1));
 
-			this.apple.y=parseInt(Math.floor(Math.random()*35+1));
+			this.apple.y=parseInt(Math.floor(Math.random()*45+1));
 			score+=10;
 			this.apple.x*=10;
     		this.apple.y*=10;
     		this.LEVEL=this.LEVEL.newLevel;//level obj
     		
     		this.levelnumber=this.LEVEL.number;//level number
-    		if(this.levelnumber==20)
+    		if(this.levelnumber==20)//Winner
     		{
     			clearInterval(this.interval);
     			
 				this.result=new State(this.level,"win");
     			return; 
     		}
-    		
+
 		  }
 		 else this.runner.pos.pop();
 		
@@ -373,7 +373,7 @@ class Move extends Draw{
 											clearInterval(here.interval);
 										}
 
-									},180);
+									},116-parseInt(this.level-parseInt(this.level*3.9)));
 									this.dir='left';
 								}
 						break;
@@ -424,7 +424,7 @@ class Move extends Draw{
 										}
 
 
-									},180);
+									},116-parseInt(this.level-parseInt(this.level*3.9)));
 										
 									this.dir='right';
 								}
@@ -472,7 +472,7 @@ class Move extends Draw{
 										}if(here.result) {
 											clearInterval(here.interval);
 										}
-									},180);
+									},116-parseInt(this.level-parseInt(this.level*3.9)));
 									this.dir='up';
 								}
 						break;
@@ -521,7 +521,7 @@ class Move extends Draw{
 										}
 
 										
-									},180);
+									},116-parseInt(this.level-parseInt(this.level*3.9)));
 									this.dir='down';
 								}
 						break;
