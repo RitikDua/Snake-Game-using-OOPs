@@ -675,7 +675,7 @@ class State  {
 	}
 	win(){
 		//console.log('Win');
-		window.alert("Oh you lose");
+		window.alert("Win");
 	
 	}
 	exit(){
@@ -731,4 +731,3 @@ function scoreBoard(level){
 	document.getElementById("ScoreBoard").appendChild(s);
 
 }
-// functij
