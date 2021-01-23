@@ -1,5 +1,5 @@
 # Snake-Game-using-OOPs
-Snake Game using basic concept of OOPs in javascript.
+Snake Game using javascript OOPs.
 
 # Screenshot
 ![SnakeGame](./screenshot.png)
